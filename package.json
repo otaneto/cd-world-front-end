@@ -11,6 +11,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "firebase": "^4.9.0",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.4",
     "vue": "^2.5.3",

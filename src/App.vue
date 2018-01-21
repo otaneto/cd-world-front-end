@@ -9,7 +9,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn v-for="item in menuItems" :key="item.title" flat router :to="item.link">
+        <v-btn v-for="item in menuItems" v-if="item.show" :key="item.title" flat router :to="item.link">
           <v-icon left>{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>
@@ -26,11 +26,29 @@
     data() {
       return {
         menuItems: [
-          { icon: 'supervisor_account', title: 'Admin', link: '/admin' },
-          { icon: 'lock_open', title: 'Login', link: '/login' },
+          { icon: 'supervisor_account', title: 'Admin', link: '/admin', show: this.isLogged() },
+          { icon: 'input', title: 'Cadastrar', link: '/sign-up', show: !this.isLogged() },
+          { icon: 'lock_open', title: 'Login', link: '/login', show: !this.isLogged() },
+          { icon: 'account_circle', title: 'User', link: '/', show: this.isLogged() },
         ],
       };
     },
+    methods: {
+      isLogged() {
+        return this.user !== null && this.user !== undefined
+      }
+    },
+    computed: {
+      user() {
+        return this.$store.getters.user;
+      }
+    },
+    watch: {
+      user(value) {
+        console.log(this.menuItems)
+        console.log(this.value)
+      }
+    }
   };
 </script>
 
