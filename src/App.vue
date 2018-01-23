@@ -26,29 +26,21 @@
     data() {
       return {
         menuItems: [
-          { icon: 'supervisor_account', title: 'Admin', link: '/admin', show: this.isLogged() },
-          { icon: 'input', title: 'Cadastrar', link: '/sign-up', show: !this.isLogged() },
-          { icon: 'lock_open', title: 'Login', link: '/login', show: !this.isLogged() },
-          { icon: 'account_circle', title: 'User', link: '/', show: this.isLogged() },
+          { icon: 'supervisor_account', title: 'Admin', link: '/admin', show: this.isLogged },
+          { icon: 'input', title: 'Cadastrar', link: '/sign-up', show: !this.isLogged },
+          { icon: 'lock_open', title: 'Login', link: '/login', show: !this.isLogged },
+          { icon: 'account_circle', title: 'User', link: '/', show: this.isLogged },
         ],
       };
-    },
-    methods: {
-      isLogged() {
-        return this.user !== null && this.user !== undefined
-      }
     },
     computed: {
       user() {
         return this.$store.getters.user;
+      },
+      isLogged() {
+        return this.user !== null && this.user !== undefined;
       }
     },
-    watch: {
-      user(value) {
-        console.log(this.menuItems)
-        console.log(this.value)
-      }
-    }
   };
 </script>
 
