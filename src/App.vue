@@ -23,23 +23,22 @@
 
 <script>
   export default {
-    data() {
-      return {
-        menuItems: [
-          { icon: 'supervisor_account', title: 'Admin', link: '/admin', show: this.isLogged },
-          { icon: 'input', title: 'Cadastrar', link: '/sign-up', show: !this.isLogged },
-          { icon: 'lock_open', title: 'Login', link: '/login', show: !this.isLogged },
-          { icon: 'account_circle', title: 'User', link: '/', show: this.isLogged },
-        ],
-      };
-    },
     computed: {
       user() {
         return this.$store.getters.user;
       },
       isLogged() {
         return this.user !== null && this.user !== undefined;
-      }
+      },
+      menuItems() {
+        const menuItems = [
+          { icon: 'supervisor_account', title: 'Admin', link: '/admin', show: this.isLogged },
+          { icon: 'input', title: 'Cadastrar', link: '/sign-up', show: !this.isLogged },
+          { icon: 'lock_open', title: 'Login', link: '/login', show: !this.isLogged },
+          { icon: 'account_circle', title: 'User', link: '/', show: this.isLogged },
+        ];
+        return menuItems;
+      },
     },
   };
 </script>
