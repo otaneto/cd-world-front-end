@@ -3,7 +3,6 @@
     <v-toolbar>
       <v-toolbar-title>
         <router-link to="/" tag="span" style="cursor: pointer">
-          <v-icon left>fa-music</v-icon>
           CD World
         </router-link>
       </v-toolbar-title>
