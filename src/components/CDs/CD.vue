@@ -7,6 +7,7 @@
             v-for="img in cd.imgs" 
             :key="img.url"
             v-bind:src="img.url"
+            transition="fade"
           >
           </v-carousel-item>
         </v-carousel>
@@ -26,7 +27,8 @@
             <div>{{ cd.genre }}</div>
           </v-card-text>
           <v-card-actions>
-            <v-btn flat class="primary">Comprar</v-btn>
+            <v-btn flat class="primary" route :to="`/cd/${cd.id}/buy`">Comprar</v-btn>
+            <v-btn flat route to="/">Voltar</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
