@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { find } from 'lodash';
+import { find, assign } from 'lodash';
 import * as firebase from 'firebase';
 
 Vue.use(Vuex);
@@ -8,12 +8,12 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     loadedCDs: [
-      { id: 1, imgs: [{ url: 'https://vuetifyjs.com/static/doc-images/cards/desert.jpg' }], title: 'The only one which is different', description: 'Description', artist: 'Savana', year: 2017, sale_price: 10.6, buy_price: 10.6, genre: 'Folcloric', stock: { quantity: 10, updated_at: '11-01-2018' } },
+      { id: 1, imgs: [{ url: 'https://goo.gl/kLGLXE' }], title: 'Empires', description: 'The 4th CD of Hillsongs carreer', artist: 'Hillsong United', year: 2015, sale_price: 10.6, buy_price: 19.99, genre: 'Gospel', stock: { quantity: 10, updated_at: '26-01-2018' } },
       { id: 2, imgs: [{ url: 'https://vuetifyjs.com/static/doc-images/cards/desert.jpg' }], title: 'Kangaroo Valley Safari', description: 'Description', artist: 'Molejo', year: 2017, sale_price: 10.6, buy_price: 10.6, genre: 'Folcloric', stock: { quantity: 0, updated_at: '11-01-2018' } },
       { id: 3, imgs: [{ url: 'https://vuetifyjs.com/static/doc-images/cards/desert.jpg' }], title: 'Kangaroo Valley Safari', description: 'Description', artist: 'Savana', year: 2017, sale_price: 10.6, buy_price: 10.6, genre: 'Folcloric', stock: { quantity: 10, updated_at: '11-01-2018' } },
     ],
     cdsFound: [
-      { id: 1, imgs: [{ url: 'https://vuetifyjs.com/static/doc-images/cards/desert.jpg' }], title: 'The only one which is different', description: 'Description', artist: 'Savana', year: 2017, sale_price: 10.6, buy_price: 10.6, genre: 'Folcloric', stock: { quantity: 10, updated_at: '11-01-2018' } },
+      { id: 1, imgs: [{ url: 'https://goo.gl/kLGLXE' }], title: 'Empires', description: 'The 4th CD of Hillsongs carreer', artist: 'Hillsong United', year: 2015, sale_price: 10.6, buy_price: 19.99, genre: 'Gospel', stock: { quantity: 10, updated_at: '26-01-2018' } },
       { id: 2, imgs: [{ url: 'https://vuetifyjs.com/static/doc-images/cards/desert.jpg' }], title: 'Kangaroo Valley Safari', description: 'Description', artist: 'Molejo', year: 2017, sale_price: 10.6, buy_price: 10.6, genre: 'Folcloric', stock: { quantity: 0, updated_at: '11-01-2018' } },
       { id: 3, imgs: [{ url: 'https://vuetifyjs.com/static/doc-images/cards/desert.jpg' }], title: 'Kangaroo Valley Safari', description: 'Description', artist: 'Savana', year: 2017, sale_price: 10.6, buy_price: 10.6, genre: 'Folcloric', stock: { quantity: 10, updated_at: '11-01-2018' } },
     ],
@@ -21,10 +21,12 @@ const store = new Vuex.Store({
   },
   mutations: {
     setUser(state, payload) {
-      state.user = payload;
+      assign(state, { user: payload });
+      // state.user = payload;
     },
     searchCDs(state, payload) {
-      state.cdsFound = payload;
+      assign(state, { cdsFound: payload });
+      // state.cdsFound = payload;
     },
   },
   actions: {
