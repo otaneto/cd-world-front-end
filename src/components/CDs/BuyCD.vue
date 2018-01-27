@@ -74,17 +74,21 @@ export default {
   },
   methods: {
     onSubmit() {
-      const body = {};
+      const newSale = {};
       this.formFields.map(field => {
-        body[field.name] = field.vModel;
-        body.cd = assign(this.cd, { amount: this.amount })
+        newSale[field.name] = field.vModel;
+        newSale.cd = assign(this.cd, { amount: this.amount });
+        newSale.user = this.user.uid;
       });
-      console.log(body);
+      this.$store.dispatch('newPurchase', newSale);
     },
   },
   computed: {
     cd() {
       return this.$store.getters.loadedCD(this.id);
+    },
+    user() {
+      return this.$store.getters.user;
     },
     formFields() {
       return [

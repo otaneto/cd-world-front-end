@@ -17,16 +17,21 @@ const store = new Vuex.Store({
       { id: 2, imgs: [{ url: 'https://vuetifyjs.com/static/doc-images/cards/desert.jpg' }], title: 'Kangaroo Valley Safari', description: 'Description', artist: 'Molejo', year: 2017, sale_price: 10.6, buy_price: 10.6, genre: 'Folcloric', stock: { quantity: 0, updated_at: '11-01-2018' } },
       { id: 3, imgs: [{ url: 'https://vuetifyjs.com/static/doc-images/cards/desert.jpg' }], title: 'Kangaroo Valley Safari', description: 'Description', artist: 'Savana', year: 2017, sale_price: 10.6, buy_price: 10.6, genre: 'Folcloric', stock: { quantity: 10, updated_at: '11-01-2018' } },
     ],
+    sales: [],
     user: null,
   },
   mutations: {
     setUser(state, payload) {
       assign(state, { user: payload });
-      // state.user = payload;
     },
     searchCDs(state, payload) {
       assign(state, { cdsFound: payload });
-      // state.cdsFound = payload;
+    },
+    setNewPurchase(state, payload) {
+      const sales = state.sales;
+      sales.push(payload);
+      assign(state, { sales });
+      console.log(state.sales);
     },
   },
   actions: {
@@ -63,6 +68,9 @@ const store = new Vuex.Store({
     getCDs({ commit }, payload) {
       commit('searchCDs', payload);
     },
+    newPurchase({ commit }, payload) {
+      commit('setNewPurchase', payload);
+    },
   },
   getters: {
     loadedCDs(state) {
@@ -76,6 +84,9 @@ const store = new Vuex.Store({
     },
     user(state) {
       return state.user;
+    },
+    sales(state) {
+      return state.sales;
     },
   },
 });
