@@ -47,13 +47,14 @@
 </template>
 <script>
 import { filter } from 'lodash';
+
 export default {
   methods: {
     searchCDs(event) {
       const expression = new RegExp(event.target.value, 'i');
-      const itemsFound = filter(this.cds, cd => expression.test(cd['title']) || expression.test(cd['artist']));
+      const itemsFound = filter(this.cds, cd => expression.test(cd.title) || expression.test(cd.artist));
       this.$store.dispatch('getCDs', itemsFound);
-    }
+    },
   },
   computed: {
     cds() {
@@ -61,7 +62,7 @@ export default {
     },
     cdsFound() {
       return this.$store.getters.cdsFound;
-    }
+    },
   },
 };
 </script>
