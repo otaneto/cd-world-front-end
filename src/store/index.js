@@ -69,7 +69,7 @@ const store = new Vuex.Store({
     },
 
     // CDS
-    newCD({ commit }, payload) {
+    newCD(payload) {
       firebase.database().ref('cds').push(payload)
         .then(
           () => {
@@ -99,7 +99,7 @@ const store = new Vuex.Store({
     },
 
     // Purchase/sales
-    newPurchase({ commit }, payload) {
+    newPurchase(payload) {
       firebase.database().ref('sales').push(payload)
         .then(
           () => {
