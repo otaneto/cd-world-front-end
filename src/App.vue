@@ -23,6 +23,9 @@
 
 <script>
   export default {
+    created() {
+      this.$store.dispatch('getSales');
+    },
     computed: {
       user() {
         return this.$store.getters.user;

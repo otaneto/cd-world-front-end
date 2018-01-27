@@ -59,7 +59,7 @@
   </v-container>
 </template>
 <script>
-import { assign } from 'lodash';
+import { assign, sumBy, map } from 'lodash';
 
 export default {
   props: ['id'],
@@ -78,7 +78,8 @@ export default {
       this.formFields.map(field => {
         newSale[field.name] = field.vModel;
         newSale.cd = assign(this.cd, { amount: this.amount });
-        newSale.user = this.user.uid;
+        // newSale.user = this.user.uid;
+        newSale.total = this.amount * this.cd.sale_price;
       });
       this.$store.dispatch('newPurchase', newSale);
     },
