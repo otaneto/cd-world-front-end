@@ -7,16 +7,8 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    loadedCDs: [
-      { id: 1, imgs: [{ url: 'https://goo.gl/kLGLXE' }], title: 'Empires', description: 'The 4th CD of Hillsongs carreer', artist: 'Hillsong United', year: 2015, sale_price: 10.6, buy_price: 19.99, genre: 'Gospel', stock: { quantity: 10, updated_at: '26-01-2018' } },
-      { id: 2, imgs: [{ url: 'https://vuetifyjs.com/static/doc-images/cards/desert.jpg' }], title: 'Kangaroo Valley Safari', description: 'Description', artist: 'Molejo', year: 2017, sale_price: 10.6, buy_price: 10.6, genre: 'Folcloric', stock: { quantity: 0, updated_at: '11-01-2018' } },
-      { id: 3, imgs: [{ url: 'https://vuetifyjs.com/static/doc-images/cards/desert.jpg' }], title: 'Kangaroo Valley Safari', description: 'Description', artist: 'Savana', year: 2017, sale_price: 10.6, buy_price: 10.6, genre: 'Folcloric', stock: { quantity: 10, updated_at: '11-01-2018' } },
-    ],
-    cdsFound: [
-      { id: 1, imgs: [{ url: 'https://goo.gl/kLGLXE' }], title: 'Empires', description: 'The 4th CD of Hillsongs carreer', artist: 'Hillsong United', year: 2015, sale_price: 10.6, buy_price: 7.99, genre: 'Gospel', stock: { quantity: 10, updated_at: '26-01-2018' } },
-      { id: 2, imgs: [{ url: 'https://vuetifyjs.com/static/doc-images/cards/desert.jpg' }], title: 'Kangaroo Valley Safari', description: 'Description', artist: 'Molejo', year: 2017, sale_price: 10.6, buy_price: 10.6, genre: 'Folcloric', stock: { quantity: 0, updated_at: '11-01-2018' } },
-      { id: 3, imgs: [{ url: 'https://vuetifyjs.com/static/doc-images/cards/desert.jpg' }], title: 'Kangaroo Valley Safari', description: 'Description', artist: 'Savana', year: 2017, sale_price: 10.6, buy_price: 10.6, genre: 'Folcloric', stock: { quantity: 10, updated_at: '11-01-2018' } },
-    ],
+    loadedCDs: [],
+    cdsFound: [],
     sales: [],
     user: null,
   },
@@ -28,6 +20,7 @@ const store = new Vuex.Store({
     // CDs
     setCDs(state, payload) {
       assign(state, { loadedCDs: payload, cdsFound: payload });
+      console.log(state.loadedCDs, state.cdsFound);
     },
     searchCDs(state, payload) {
       assign(state, { cdsFound: payload });
@@ -76,12 +69,24 @@ const store = new Vuex.Store({
     },
 
     // CDS
-    getCDs({ commit }, payload) {
+    newCD({ commit }, payload) {
+      firebase.database().ref('cds').push(payload)
+        .then(
+          () => {
+          },
+        )
+        .catch(
+          error => console.log(error),
+        );
+    },
+    getCDs({ commit }) {
       firebase.database().ref('cds').once('value')
         .then(
           (data) => {
             const obj = data.val();
-            const cds = map(keys(obj), key => obj[key]);
+            const cds = map(keys(obj), key => (
+              { ...obj[key], id: key }
+            ));
             commit('setCDs', cds);
           },
         )
@@ -97,8 +102,8 @@ const store = new Vuex.Store({
     newPurchase({ commit }, payload) {
       firebase.database().ref('sales').push(payload)
         .then(
-          ({ key }) => {
-            commit('setNewPurchase', key);
+          () => {
+            // commit('setNewPurchase', key);
           },
         )
         .catch(
@@ -127,7 +132,7 @@ const store = new Vuex.Store({
       return state.cdsFound;
     },
     loadedCD(state) {
-      return cdId => find(state.loadedCDs, ['id', Number(cdId)]);
+      return cdId => find(state.loadedCDs, ['id', cdId]);
     },
     user(state) {
       return state.user;

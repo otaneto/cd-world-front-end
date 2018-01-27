@@ -16,6 +16,7 @@
                     :type="field.type"
                     v-model="field.vModel"
                     :label="field.label"
+                    :step="field.step"
                     required
                   >
                   </v-text-field>
@@ -51,20 +52,26 @@ export default {
         { name: 'genre', vModel: this.genre, label: 'Gênero', type: 'text' },
         { name: 'year', vModel: this.year, label: 'Ano', type: 'number' },
         { name: 'img', vModel: this.img, label: 'URL da Capa', type: 'text' },
-        { name: 'sale_price', vModel: this.sale_price, label: 'Preço de venda', type: 'number' },
-        { name: 'buy_price', vModel: this.buy_price, label: 'Preço de compra', type: 'number' },
+        { name: 'sale_price', vModel: this.sale_price, label: 'Preço de venda', type: 'number', step: '0.01' },
+        { name: 'buy_price', vModel: this.buy_price, label: 'Preço de compra', type: 'number', step: '0.01' },
         { name: 'stock', vModel: this.stock, label: 'Quantidade em estoque', type: 'number' },
       ]
     }
   },
   methods: {
     onSubmit() {
-      console.log(this.formFields);
       const body = {}
       map(this.formFields, field => {
-        body[field.name] = field.vModel;
+        if (field.type === 'number') {
+          body[field.name] = Number(field.vModel);
+        } else {
+          body[field.name] = field.vModel;
+        }
+        if(field.name === 'stock') {
+          body[field.name] = { updated_at: new Date().toISOString(), quantity: field.vModel};
+        }
       });
-      console.log(body);
+      this.$store.dispatch('newCD', body);
     }
   }
 }

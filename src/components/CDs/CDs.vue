@@ -14,7 +14,7 @@
     <v-layout row wrap>
       <v-flex xs12 md4 v-if="cdsFound.length > 0" v-for="cd in cdsFound" :key="cd.id">
         <v-card router :to="`cd/${cd.id}`">
-          <v-card-media v-bind:src="cd.imgs[0].url" height="200px">
+          <v-card-media v-bind:src="cd.img" height="200px">
           </v-card-media>
           <v-card-title primary-title>
             <div>
@@ -50,7 +50,7 @@ import { filter } from 'lodash';
 
 export default {
   created() {
-    // this.$store.dispatch('getCDs');
+    this.$store.dispatch('getCDs');
   },
   methods: {
     searchCDs(event) {

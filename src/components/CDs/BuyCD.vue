@@ -17,7 +17,7 @@
               </v-flex>
               <v-flex xs5 md3>
                 <v-card-media
-                  :src="cd.imgs[0].url"
+                  :src="cd.img"
                   height="125px"
                   contain
                 >

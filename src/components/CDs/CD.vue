@@ -4,9 +4,8 @@
       <v-flex xs12 md8>
         <v-carousel>
           <v-carousel-item
-            v-for="img in cd.imgs" 
-            :key="img.url"
-            v-bind:src="img.url"
+            :key="cd.img"
+            v-bind:src="cd.img"
             transition="fade"
           >
           </v-carousel-item>
@@ -15,9 +14,11 @@
       <v-flex xs12 md4>
         <v-card>
           <v-card-title primary-title>
-            <div class="headline">{{ cd.title }}</div>
-            <span class="grey--text" v-if="cd.stock.quantity > 0">Quantidade em estoque: {{ cd.stock.quantity }}</span>
-            <span class="grey--text" v-else>Item indisponível</span>
+            <v-layout column>
+              <div class="headline">{{ cd.title }}</div>
+              <div class="grey--text" v-if="cd.stock.quantity > 0">Quantidade em estoque: {{ cd.stock.quantity }}</div>
+              <div class="grey--text" v-else>Item indisponível</div>
+            </v-layout>
           </v-card-title>
           <v-card-text>
             <h1>R$ {{ cd.sale_price }}</h1>
@@ -40,6 +41,7 @@ export default {
   props: ['id'],
   computed: {
     cd() {
+      console.log(this.id);
       return this.$store.getters.loadedCD(this.id);
     },
   },
