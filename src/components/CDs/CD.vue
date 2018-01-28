@@ -28,8 +28,16 @@
             <div>{{ cd.genre }}</div>
           </v-card-text>
           <v-card-actions>
-            <v-btn flat class="primary" route :to="`/cd/${cd.id}/buy`">Comprar</v-btn>
             <v-btn flat route to="/">Voltar</v-btn>
+            <v-btn
+              flat
+              class="primary"
+              route
+              :to="`/cd/${cd.id}/buy`"
+              v-if="cd.stock.quantity > 0"
+            >
+              Comprar
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -41,7 +49,6 @@ export default {
   props: ['id'],
   computed: {
     cd() {
-      console.log(this.id);
       return this.$store.getters.loadedCD(this.id);
     },
   },

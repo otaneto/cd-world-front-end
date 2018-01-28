@@ -5,6 +5,7 @@ import CDs from '@/components/CDs/CDs';
 import CD from '@/components/CDs/CD';
 import BuyCD from '@/components/CDs/BuyCD';
 import NewCD from '@/components/CDs/NewCD';
+import PurchaseConfirmation from '@/components/CDs/PurchaseConfirmation';
 import Login from '@/components/User/Login';
 import SignUp from '@/components/User/SignUp';
 import Admin from '@/components/Admin/Admin';
@@ -29,6 +30,12 @@ export default new Router({
       name: 'Buy CD',
       props: true,
       component: BuyCD,
+    },
+    {
+      path: '/cd/:id/confirm_purchase/:sale_id',
+      name: 'Confirm Purchase',
+      props: true,
+      component: PurchaseConfirmation,
     },
     {
       path: '/admin/cds/new',

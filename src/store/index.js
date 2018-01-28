@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { find, assign, keys, map } from 'lodash';
+import { find, assign, keys, map, omit } from 'lodash';
 import * as firebase from 'firebase';
+import router from '../router';
 
 Vue.use(Vuex);
 
@@ -11,8 +12,12 @@ const store = new Vuex.Store({
     cdsFound: [],
     sales: [],
     user: null,
+    isFetching: false,
   },
   mutations: {
+    setIsFetching(state, payload) {
+      assign(state, { isFetching: payload });
+    },
     // User
     setUser(state, payload) {
       assign(state, { user: payload });
@@ -20,13 +25,26 @@ const store = new Vuex.Store({
     // CDs
     setCDs(state, payload) {
       assign(state, { loadedCDs: payload, cdsFound: payload });
-      console.log(state.loadedCDs, state.cdsFound);
+    },
+    setNewCD(state, payload) {
+      const { loadedCDs, cdsFound } = state;
+      loadedCDs.push(payload);
+      cdsFound.push(payload);
+      assign(state, { loadedCDs, cdsFound });
     },
     searchCDs(state, payload) {
       assign(state, { cdsFound: payload });
     },
+    decreaseCDStock(state, payload) {
+      const cds = map(state.loadedCDs, (cd) => {
+        if (cd.id === payload.id) {
+          assign(cd, payload);
+        }
+      });
+      assign(state, { loadedCDs: cds, cdsFound: cds });
+    },
     // Purchase/Sales
-    setNewPurchase(state, payload) {
+    setNewSale(state, payload) {
       const sales = state.sales;
       sales.push(payload);
       assign(state, { sales });
@@ -69,10 +87,11 @@ const store = new Vuex.Store({
     },
 
     // CDS
-    newCD(payload) {
+    newCD({ commit }, payload) {
       firebase.database().ref('cds').push(payload)
         .then(
-          () => {
+          (data) => {
+            commit('setNewCD', { id: data.key, ...payload });
           },
         )
         .catch(
@@ -80,6 +99,7 @@ const store = new Vuex.Store({
         );
     },
     getCDs({ commit }) {
+      commit('setIsFetching', true);
       firebase.database().ref('cds').once('value')
         .then(
           (data) => {
@@ -87,11 +107,15 @@ const store = new Vuex.Store({
             const cds = map(keys(obj), key => (
               { ...obj[key], id: key }
             ));
+            commit('setIsFetching', false);
             commit('setCDs', cds);
           },
         )
         .catch(
-          error => console.log(error),
+          (error) => {
+            console.log(error);
+            commit('setIsFetching', false);
+          },
         );
     },
     findCDs({ commit }, payload) {
@@ -99,11 +123,13 @@ const store = new Vuex.Store({
     },
 
     // Purchase/sales
-    newPurchase(payload) {
+    newPurchase({ commit }, payload) {
       firebase.database().ref('sales').push(payload)
         .then(
-          () => {
-            // commit('setNewPurchase', key);
+          ({ key }) => {
+            const newSale = { id: key, ...payload };
+            commit('setNewSale', newSale);
+            router.push(`/cd/${newSale.cd.id}/confirm_purchase/${key}`);
           },
         )
         .catch(
@@ -117,6 +143,23 @@ const store = new Vuex.Store({
             const obj = data.val();
             const sales = map(keys(obj), key => obj[key]);
             commit('setSales', sales);
+          },
+        )
+        .catch(
+          error => console.log(error),
+        );
+    },
+    decreaseCDStock({ commit }, payload) {
+      const newStockQuantity = payload.cd.stock.quantity - payload.cd.amount;
+      const newStockDate = new Date().toISOString();
+      const updatedCD = {
+        ...omit(payload.cd, ['amount']),
+        stock: { quantity: newStockQuantity, updated_at: newStockDate },
+      };
+      firebase.database().ref('cds').child(payload.cd.id).update(updatedCD)
+        .then(
+          () => {
+            commit('decreaseCDStock', updatedCD);
           },
         )
         .catch(
@@ -139,6 +182,12 @@ const store = new Vuex.Store({
     },
     sales(state) {
       return state.sales;
+    },
+    sale(state) {
+      return saleId => find(state.sales, ['id', saleId]);
+    },
+    isFetching(state) {
+      return state.isFetching;
     },
   },
 });

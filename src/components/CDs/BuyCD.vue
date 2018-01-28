@@ -4,15 +4,19 @@
       <v-flex xs12 md10>
         <v-card color="blue">
           <v-card-text>
-            <v-layout row>
+            <v-layout row align-center>
               <v-flex xs7 md9>
                 <div class="headline white--text">{{ cd.title }}</div>
+                <h2 class="white--text">Valor Unitário: R$ {{ cd.sale_price }}</h2>
                 <div class="white--text">{{ cd.artist }}, {{ cd.year }}</div>
-                <v-layout row align-center md4>
-                  <div class="white--text">Quantidade Comprada: </div>
-                  <v-flex md1>
-                    <v-text-field style="font-size: 12px" dark single-line :value="amount" type="number"></v-text-field>
+                <v-layout column justify-center md4 class="white--text">
+                  <v-flex row>
+                    Quantidade:
+                    <v-flex md1>
+                      <v-text-field style="font-size: 12px" dark single-line v-model="amount" min="1" type="number"></v-text-field>
+                    </v-flex>
                   </v-flex>
+                  <h2 class="white--text">Valor total compra: R$ {{ amount * cd.sale_price }} </h2>
                 </v-layout>
               </v-flex>
               <v-flex xs5 md3>
@@ -78,10 +82,12 @@ export default {
       this.formFields.map(field => {
         newSale[field.name] = field.vModel;
         newSale.cd = assign(this.cd, { amount: this.amount });
+        newSale.date = new Date().toISOString();
         // newSale.user = this.user.uid;
         newSale.total = this.amount * this.cd.sale_price;
       });
       this.$store.dispatch('newPurchase', newSale);
+      this.$store.dispatch('decreaseCDStock', newSale);
     },
   },
   computed: {
