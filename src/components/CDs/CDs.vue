@@ -15,12 +15,12 @@
       <v-flex md2>
         <v-list subheader>
           <v-subheader>Gênero</v-subheader>
-          <v-list-tile avatar v-for="genre in genres" :key="genre.name">
+          <v-list-tile avatar v-for="genre in genresModel" :key="genre">
             <v-list-tile-action>
-              <v-checkbox v-model="genre.vModel"></v-checkbox>
+              <v-checkbox v-model="genres" :value="genre" @change="filterCDsByGenre"></v-checkbox>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-sub-title>{{ genre.name }}</v-list-tile-sub-title>
+              <v-list-tile-sub-title>{{ genre }}</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
@@ -46,7 +46,7 @@
                 <h3 v-else class="red--text">Item Indisponível</h3>
               </v-card-text>
               <v-card-actions>
-                <v-btn 
+                <v-btn
                   class="primary"
                   flat
                   route
@@ -58,7 +58,7 @@
             </v-card>
           </v-flex>
           <v-flex xs12 v-if="cdsFound.length <= 0">
-            <p class="">Nenhum CD encontrado</p>
+            <h2 class="text-md-center">Nenhum CD encontrado!</h2>
           </v-flex>
         </v-layout>
       </v-flex>
@@ -66,7 +66,7 @@
   </v-container>
 </template>
 <script>
-import { filter } from 'lodash';
+import { filter, map } from 'lodash';
 
 export default {
   created() {
@@ -74,21 +74,27 @@ export default {
   },
   data() {
     return {
-      genres: [ 
-        { name:'Gospel', vModel: false },
-        { name: 'MPB' , vModel: false },
-        { name: 'Pop', vModel: false },
-        { name: 'Rock', vModel: false },
-        { name: 'Samba', vModel: false },
-        { name: 'Infantil', vModel: false } 
-      ],
+      genresModel: [ 'Gospel', 'MPB' , 'Pop', 'Rock', 'Samba', 'Infantil', 'Reggae', 'Forró', 'Pagode' ],
+      genres: [],
     }
   },
   methods: {
     searchCDs(event) {
       const expression = new RegExp(event.target.value, 'i');
       const itemsFound = filter(this.cds, cd => expression.test(cd.title) || expression.test(cd.artist));
+      
       this.$store.dispatch('findCDs', itemsFound);
+    },
+    filterCDsByGenre() {
+      const filteredItems = [];
+      map(this.genres, genre => {
+        map(this.cdsFound, item => {
+          if (genre === item.genre) {
+            filteredItems.push(item);
+          }
+        })
+      });
+      this.$store.dispatch('findCDs', this.genres.length > 0 ? filteredItems : this.cds);
     },
   },
   computed: {

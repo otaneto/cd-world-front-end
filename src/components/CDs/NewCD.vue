@@ -25,7 +25,7 @@
               </v-layout>
               <v-layout>
                 <barcode v-bind:value="formFields[9].vModel">
-                  Show this if the rendering fails.
+                  Não foi possível gerar o código de barras'
                 </barcode>
               </v-layout>
               <v-layout row>
