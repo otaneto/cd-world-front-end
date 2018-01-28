@@ -13,6 +13,17 @@
           <v-icon left>{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>
+        <v-menu offset-y v-if="isLogged">
+          <v-btn flat slot="activator">
+            <v-icon left>account_circle</v-icon>
+            User
+          </v-btn>
+          <v-list>
+            <v-list-tile @click="logout">
+              <v-list-tile-title>Logout</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
       </v-toolbar-items>
     </v-toolbar>
     <main>
@@ -26,6 +37,12 @@
     created() {
       this.$store.dispatch('getSales');
     },
+    methods: {
+      logout() {
+        this.$store.dispatch('logout');
+        this.$router.push('/login');
+      },
+    },
     computed: {
       user() {
         return this.$store.getters.user;
@@ -38,7 +55,6 @@
           { icon: 'supervisor_account', title: 'Admin', link: '/admin', show: this.isLogged },
           { icon: 'input', title: 'Cadastrar', link: '/sign-up', show: !this.isLogged },
           { icon: 'lock_open', title: 'Login', link: '/login', show: !this.isLogged },
-          { icon: 'account_circle', title: 'User', link: '/', show: this.isLogged },
         ];
         return menuItems;
       },

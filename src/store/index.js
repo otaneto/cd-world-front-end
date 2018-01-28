@@ -13,10 +13,14 @@ const store = new Vuex.Store({
     sales: [],
     user: null,
     isFetching: false,
+    snackbar: false,
   },
   mutations: {
     setIsFetching(state, payload) {
       assign(state, { isFetching: payload });
+    },
+    showSnackBar(state, payload) {
+      assign(state, { snackbar: payload });
     },
     // User
     setUser(state, payload) {
@@ -46,7 +50,7 @@ const store = new Vuex.Store({
     // Purchase/Sales
     setNewSale(state, payload) {
       const sales = state.sales;
-      sales.push(payload);
+      sales.push(omit(payload));
       assign(state, { sales });
     },
     setSales(state, payload) {
@@ -85,7 +89,13 @@ const store = new Vuex.Store({
           error => console.log(error),
         );
     },
-
+    autoLogin({ commit }, payload) {
+      commit('setUser', { id: payload.uid });
+    },
+    logout({ commit }) {
+      firebase.auth().signOut();
+      commit('setUser', null);
+    },
     // CDS
     newCD({ commit }, payload) {
       firebase.database().ref('cds').push(payload)
@@ -124,10 +134,10 @@ const store = new Vuex.Store({
 
     // Purchase/sales
     newPurchase({ commit }, payload) {
-      firebase.database().ref('sales').push(payload)
+      firebase.database().ref('sales').push(omit(payload, ['cd.stock']))
         .then(
           ({ key }) => {
-            const newSale = { id: key, ...payload };
+            const newSale = { id: key, ...omit(payload, ['cd.stock']) };
             commit('setNewSale', newSale);
             router.push(`/cd/${newSale.cd.id}/confirm_purchase/${key}`);
           },

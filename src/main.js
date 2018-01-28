@@ -30,5 +30,10 @@ new Vue({
       storageBucket: 'vue-cd-world.appspot.com',
       messagingSenderId: '116344488190',
     });
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        store.dispatch('autoLogin', user);
+      }
+    });
   },
 });

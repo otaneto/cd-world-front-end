@@ -34,7 +34,7 @@
                 <v-flex md4>{{ sale.cd.sale_price }}</v-flex>
             </v-layout>
             <v-layout>
-              <strong>Valor Total: R$ {{ sale.total }}</strong>
+              <strong>Valor Total: R$ {{ sale.total_purchase }}</strong>
             </v-layout>
           </v-card-text>
         </v-card>

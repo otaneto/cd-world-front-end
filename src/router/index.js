@@ -9,6 +9,7 @@ import PurchaseConfirmation from '@/components/CDs/PurchaseConfirmation';
 import Login from '@/components/User/Login';
 import SignUp from '@/components/User/SignUp';
 import Admin from '@/components/Admin/Admin';
+import AuthGuard from './auth-guard';
 
 Vue.use(Router);
 
@@ -18,6 +19,7 @@ export default new Router({
       path: '/',
       name: 'CDs',
       component: CDs,
+      beforeEnter: AuthGuard,
     },
     {
       path: '/cd/:id',

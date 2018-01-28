@@ -83,8 +83,8 @@ export default {
         newSale[field.name] = field.vModel;
         newSale.cd = assign(this.cd, { amount: this.amount });
         newSale.date = new Date().toISOString();
-        // newSale.user = this.user.uid;
-        newSale.total = this.amount * this.cd.sale_price;
+        newSale.user = this.user.id;
+        newSale.total_purchase = this.amount * this.cd.sale_price;
       });
       this.$store.dispatch('newPurchase', newSale);
       this.$store.dispatch('decreaseCDStock', newSale);
@@ -104,7 +104,7 @@ export default {
         { name: 'house_number', label: 'Número', id: 'house_number', vModel: this.house_number, type: 'text', required: true },
         { name: 'tel_number', label: 'Telefone para contato', id: 'tel_number', vModel: this.tel_number, type: 'text', required: true },
       ];
-    } 
+    }
   },
 };
 </script>
