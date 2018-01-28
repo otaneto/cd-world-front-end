@@ -8,8 +8,8 @@
           </v-card-title>
           <v-card-text>
             <form @submit.prevent="onSubmit">
-              <v-layout row wrap md10>
-                <v-flex xs12 md6 v-for="field in formFields" :key="field.name">
+              <v-layout row wrap md10 justify-space-between>
+                <v-flex xs12 md5 v-for="field in formFields" :key="field.name">
                   <v-text-field
                     :name="field.name"
                     :id="field.name"
@@ -18,9 +18,15 @@
                     :label="field.label"
                     :step="field.step"
                     required
+                    :disabled="field.disabled"
                   >
                   </v-text-field>
                 </v-flex>
+              </v-layout>
+              <v-layout>
+                <barcode v-bind:value="formFields[9].vModel">
+                  Show this if the rendering fails.
+                </barcode>
               </v-layout>
               <v-layout row>
                 <v-flex>
@@ -35,9 +41,13 @@
   </v-container>
 </template>
 <script>
-import { keys, map, capitalize } from 'lodash';
+import { keys, map, random } from 'lodash';
+import VueBarcode from 'vue-barcode';
 
 export default {
+  components: {
+    'barcode': VueBarcode,
+  },
   data() {
     return { 
       title: '', description: '', artist: '', year: '', img: '', sale_price: '', buy_price: '', genre: '', stock: '',
@@ -46,15 +56,16 @@ export default {
   computed: {
     formFields() {
       return [
-        { name: 'title', vModel: this.title, label: 'Título', type: 'text' },
-        { name: 'description', vModel: this.description, label: 'Descrição', type: 'text' },
-        { name: 'artist', vModel: this.artist, label: 'Astista', type: 'text' },
-        { name: 'genre', vModel: this.genre, label: 'Gênero', type: 'text' },
-        { name: 'year', vModel: this.year, label: 'Ano', type: 'number' },
-        { name: 'img', vModel: this.img, label: 'URL da Capa', type: 'text' },
-        { name: 'sale_price', vModel: this.sale_price, label: 'Preço de venda', type: 'number', step: '0.01' },
-        { name: 'buy_price', vModel: this.buy_price, label: 'Preço de compra', type: 'number', step: '0.01' },
-        { name: 'stock', vModel: this.stock, label: 'Quantidade em estoque', type: 'number' },
+        { name: 'title', vModel: this.title, label: 'Título', type: 'text', disabled: false },
+        { name: 'description', vModel: this.description, label: 'Descrição', type: 'text', disabled: false },
+        { name: 'artist', vModel: this.artist, label: 'Astista', type: 'text', disabled: false },
+        { name: 'genre', vModel: this.genre, label: 'Gênero', type: 'text', disabled: false },
+        { name: 'year', vModel: this.year, label: 'Ano', type: 'number', disabled: false },
+        { name: 'img', vModel: this.img, label: 'URL da Capa', type: 'text', disabled: false },
+        { name: 'sale_price', vModel: this.sale_price, label: 'Preço de venda', type: 'number', step: '0.01', disabled: false },
+        { name: 'buy_price', vModel: this.buy_price, label: 'Preço de compra', type: 'number', step: '0.01', disabled: false },
+        { name: 'stock', vModel: this.stock, label: 'Quantidade em estoque', type: 'number', disabled: false },
+        { name: 'bar_code', label: 'Código de Barras', vModel: random(79111111111111111, 79999999999999999), type: 'number', disabled: true },
       ]
     }
   },
