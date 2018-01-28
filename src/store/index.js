@@ -151,7 +151,7 @@ const store = new Vuex.Store({
         .then(
           (data) => {
             const obj = data.val();
-            const sales = map(keys(obj), key => obj[key]);
+            const sales = map(keys(obj), key => ({ id: key, ...obj[key] }));
             commit('setSales', sales);
           },
         )

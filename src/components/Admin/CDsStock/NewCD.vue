@@ -2,6 +2,7 @@
   <v-container>
     <v-layout row>
       <v-flex xs12 md10>
+        <v-btn flat route :to="'/admin'">Voltar</v-btn>
         <v-card>
           <v-card-title>
             <div class="headline">Novo CD</div>

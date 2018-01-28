@@ -4,7 +4,9 @@ import Router from 'vue-router';
 import CDs from '@/components/CDs/CDs';
 import CD from '@/components/CDs/CD';
 import BuyCD from '@/components/CDs/BuyCD';
-import NewCD from '@/components/CDs/NewCD';
+import NewCD from '@/components/Admin/CDsStock/NewCD';
+import ListCDs from '@/components/Admin/CDsStock/ListCDs';
+import ListSales from '@/components/Admin/Sales/ListSales';
 import PurchaseConfirmation from '@/components/CDs/PurchaseConfirmation';
 import Login from '@/components/User/Login';
 import SignUp from '@/components/User/SignUp';
@@ -40,11 +42,6 @@ export default new Router({
       component: PurchaseConfirmation,
     },
     {
-      path: '/admin/cds/new',
-      name: 'New CD',
-      component: NewCD,
-    },
-    {
       path: '/login',
       name: 'Login',
       component: Login,
@@ -58,6 +55,23 @@ export default new Router({
       path: '/admin',
       name: 'Admin',
       component: Admin,
+      children: [
+        {
+          path: '',
+          name: 'CDs Stock',
+          component: ListCDs,
+        },
+        {
+          path: 'cds/new',
+          name: 'New CD',
+          component: NewCD,
+        },
+        {
+          path: 'sales',
+          name: 'CD Sales',
+          component: ListSales,
+        },
+      ],
     },
   ],
 });
