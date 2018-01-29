@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { find, assign, keys, map, omit } from 'lodash';
+import { find, assign, keys, map, omit, findIndex, pullAt } from 'lodash';
 import * as firebase from 'firebase';
 import router from '../router';
 
@@ -46,6 +46,10 @@ const store = new Vuex.Store({
         }
       });
       assign(state, { loadedCDs: cds, cdsFound: cds });
+    },
+    removeCD(state, payload) {
+      const idxToRemove = findIndex(state.loadedCDs, ['id', payload]);
+      pullAt(state.loadedCDs, [idxToRemove]);
     },
     // Purchase/Sales
     setNewSale(state, payload) {
@@ -126,6 +130,31 @@ const store = new Vuex.Store({
             console.log(error);
             commit('setIsFetching', false);
           },
+        );
+    },
+    updateCD({ commit }, payload) {
+      firebase.database().ref('cds').child(payload.id).update(payload)
+        .then(
+          () => {
+            router.push('/admin');
+          },
+        )
+        .catch(
+          (error) => {
+            router.push('/admin');
+            console.log(error);
+          },
+        );
+    },
+    removeCD({ commit }, payload) {
+      firebase.database().ref('cds').child(payload).remove()
+        .then(
+          (data) => {
+            commit('removeCD', payload);
+          },
+        )
+        .catch(
+          error => console.log(error),
         );
     },
     findCDs({ commit }, payload) {

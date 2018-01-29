@@ -5,6 +5,7 @@ import CDs from '@/components/CDs/CDs';
 import CD from '@/components/CDs/CD';
 import BuyCD from '@/components/CDs/BuyCD';
 import NewCD from '@/components/Admin/CDsStock/NewCD';
+import EditCD from '@/components/Admin/CDsStock/EditCD';
 import ListCDs from '@/components/Admin/CDsStock/ListCDs';
 import ListSales from '@/components/Admin/Sales/ListSales';
 import PurchaseConfirmation from '@/components/CDs/PurchaseConfirmation';
@@ -65,6 +66,12 @@ export default new Router({
           path: 'cds/new',
           name: 'New CD',
           component: NewCD,
+        },
+        {
+          path: 'cds/:id/edit',
+          name: 'Edit CD',
+          component: EditCD,
+          props: true,
         },
         {
           path: 'sales',

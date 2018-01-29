@@ -22,11 +22,23 @@
             <td>
               <v-layout row>
                 <v-btn flat icon>
+                  <v-icon>monetization_on</v-icon>
+                </v-btn>
+                <v-btn flat icon @click="onEditCD(props.item.id)">
                   <v-icon>mode_edit</v-icon>
                 </v-btn>
-                <v-btn flat icon>
-                  <v-icon>delete</v-icon>
-                </v-btn>
+                <v-menu>
+                  <v-btn flat icon slot="activator">
+                    <v-icon left>delete</v-icon>
+                  </v-btn>
+                  <v-card>
+                    <v-card-text>Tem certeza que deseja excluir o CD?</v-card-text>
+                    <v-card-actions>
+                      <v-btn color="red" flat @click="onDeleteCD(props.item.id)">Sim</v-btn>
+                      <v-btn flat>Não</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-menu>
               </v-layout>
             </td>
           </template>
@@ -53,14 +65,17 @@ export default {
     cds() {
       return this.$store.getters.loadedCDs;
     },
-    cdsFound() {
-      return this.$store.getters.cdsFound;
-    },
     isFetching() {
       return this.$store.getters.isFetching;
     },
   },
   methods: {
+    onEditCD(id) {
+      this.$router.push(`/admin/cds/${id}/edit`);
+    },
+    onDeleteCD(id) {
+      this.$store.dispatch('removeCD', id);
+    }
   }
 }
 </script>

@@ -41,7 +41,6 @@ export default {
   },
   computed: {
     sales() {
-      console.log(this.$store.getters.sales);
       return this.$store.getters.sales;
     },
   },
