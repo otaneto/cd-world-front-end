@@ -78,6 +78,12 @@ export default new Router({
           name: 'CD Sales',
           component: ListSales,
         },
+        {
+          path: 'sales/:sale_id',
+          name: 'Sale',
+          props: true,
+          component: PurchaseConfirmation,
+        },
       ],
     },
   ],

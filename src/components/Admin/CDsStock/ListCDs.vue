@@ -4,7 +4,10 @@
       <v-btn class="primary" flat route :to="'/admin/cds/new'" >Novo CD</v-btn>
     </v-layout>
     <v-container>
-      <v-layout column>
+      <v-layout row wrap v-if="isFetching === true" justify-center>
+        <v-progress-circular indeterminate v-bind:size="70" v-bind:width="7" color="primary"></v-progress-circular>
+      </v-layout>
+      <v-layout column v-if="isFetching === false">
         <div class="headline">Estoque de CDs</div>
         <v-data-table
           v-bind:headers="headers"

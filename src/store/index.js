@@ -106,6 +106,7 @@ const store = new Vuex.Store({
         .then(
           (data) => {
             commit('setNewCD', { id: data.key, ...payload });
+            router.push('/admin');
           },
         )
         .catch(
@@ -117,44 +118,52 @@ const store = new Vuex.Store({
       firebase.database().ref('cds').once('value')
         .then(
           (data) => {
+            commit('setIsFetching', false);
             const obj = data.val();
             const cds = map(keys(obj), key => (
               { ...obj[key], id: key }
             ));
-            commit('setIsFetching', false);
             commit('setCDs', cds);
           },
         )
         .catch(
           (error) => {
-            console.log(error);
             commit('setIsFetching', false);
+            console.log(error);
           },
         );
     },
     updateCD({ commit }, payload) {
+      commit('setIsFetching', true);
       firebase.database().ref('cds').child(payload.id).update(payload)
         .then(
           () => {
             router.push('/admin');
+            commit('setIsFetching', false);
           },
         )
         .catch(
           (error) => {
             router.push('/admin');
             console.log(error);
+            commit('setIsFetching', false);
           },
         );
     },
     removeCD({ commit }, payload) {
+      commit('setIsFetching', true);
       firebase.database().ref('cds').child(payload).remove()
         .then(
-          (data) => {
+          () => {
             commit('removeCD', payload);
+            commit('setIsFetching', false);
           },
         )
         .catch(
-          error => console.log(error),
+          (error) => {
+            console.log(error);
+            commit('setIsFetching', true);
+          },
         );
     },
     findCDs({ commit }, payload) {

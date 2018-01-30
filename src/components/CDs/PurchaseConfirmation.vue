@@ -40,7 +40,7 @@
         </v-card>
       </v-flex>
       <v-flex>
-        <v-btn class="primary" type="button" flat route :to="'/'">Voltar</v-btn>
+        <v-btn class="primary" type="button" flat route :to="'../'">Voltar</v-btn>
         <!-- <v-btn flat @click="printTaxCoupon">Imprimir</v-btn> -->
       </v-flex>
     </v-layout>

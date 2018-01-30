@@ -17,7 +17,7 @@
           <td>{{ props.item.cd.amount }}</td>
           <td>{{ props.item.date }}</td>
           <td>
-            <v-btn flat icon>
+            <v-btn flat icon route :to="`/admin/sales/${props.item.id}`">
               <v-icon>remove_red_eye</v-icon>
             </v-btn>
           </td>
